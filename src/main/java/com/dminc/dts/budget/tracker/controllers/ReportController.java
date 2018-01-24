@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dminc.dts.budget.tracker.db.ProjectStatusRepository;
 import com.dminc.dts.budget.tracker.db.ReportRepository;
 import com.dminc.dts.budget.tracker.model.ProjectStatus;
-import com.dminc.dts.budget.tracker.model.RowColValue;
+import com.dminc.dts.budget.tracker.model.DomainRangeValue;
 
 @RestController
 @RequestMapping("/reports")
@@ -22,7 +22,7 @@ public class ReportController {
     ProjectStatusRepository projectStatusRepository;
     
     @RequestMapping("/resource-plan/{project_id}")
-    public List<RowColValue> getResourcePlan(@PathVariable("project_id") int id) {
+    public List<DomainRangeValue> getResourcePlan(@PathVariable("project_id") int id) {
         return reports.getResourcePlanByProjectId(id);
     }
 

@@ -6,26 +6,26 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.dminc.dts.budget.tracker.model.RowColValue;
+import com.dminc.dts.budget.tracker.model.DomainRangeValue;
 
-public interface ReportRepository extends JpaRepository<RowColValue, Integer> {
+public interface ReportRepository extends JpaRepository<DomainRangeValue, Integer> {
 
     @Query(nativeQuery=true, 
-           value="SELECT Week AS ROW, PERSON_NAME AS COL, SUM(ACTUAL_HOURS) AS VAL "+
+           value="SELECT Week AS DOMAIN, PERSON_NAME AS RANGE, SUM(ACTUAL_HOURS) AS VALUE "+
                     "from BIG_QUERY BQ "+
                     "WHERE PROJECT_ID = :id "+
                     "GROUP BY WEEK, PERSON_NAME "+
                     "ORDER BY WEEK, PERSON_NAME")
-    List<RowColValue> getResourcePlanByProjectId(@Param("id") int id);
+    List<DomainRangeValue> getResourcePlanByProjectId(@Param("id") int id);
 
 
     @Query(nativeQuery=true, 
-            value="SELECT Week AS ROW, PERSON_NAME AS COL, SUM(ACTUAL_HOURS) AS VAL "+
+            value="SELECT Week AS DOMAIN, PERSON_NAME AS RANGE, SUM(ACTUAL_HOURS) AS VALUE "+
                      "from BIG_QUERY BQ "+
                      "WHERE PROJECT_ID = :id "+
                      "GROUP BY WEEK, PERSON_NAME "+
                      "ORDER BY WEEK, PERSON_NAME")
-     List<RowColValue> getResourcePlanByProjectId2(@Param("id") int id);
+     List<DomainRangeValue> getResourcePlanByProjectId2(@Param("id") int id);
 
     
 }
