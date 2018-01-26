@@ -16,7 +16,7 @@ import javax.persistence.Table;
 public class Allocation {
     
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
     private int id;
     
     @OneToOne(targetEntity=Project.class, fetch=FetchType.EAGER)

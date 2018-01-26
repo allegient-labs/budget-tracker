@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dminc.dts.budget.tracker.db.ProjectStatusRepository;
 import com.dminc.dts.budget.tracker.db.ReportRepository;
-import com.dminc.dts.budget.tracker.model.ProjectStatus;
+import com.dminc.dts.budget.tracker.model.DomainRangeResult;
 import com.dminc.dts.budget.tracker.model.DomainRangeValue;
+import com.dminc.dts.budget.tracker.model.ProjectStatus;
 
 @RestController
 @RequestMapping("/reports")
@@ -31,5 +32,17 @@ public class ReportController {
         return projectStatusRepository.getProjectStatus(id);
     }
     
+    @RequestMapping("/pretty-resource-plan/{project_id}")
+    public DomainRangeResult getPrettyResourcePlan(@PathVariable("project_id") int id) {
+        List<DomainRangeValue> domainData = reports.getResourcePlanByProjectId(id);
+        return new DomainRangeResult.Builder(domainData).domainKey("week").build();
+    }
+
+    @RequestMapping("/actuals-vs-forecast/{project_id}")
+    public DomainRangeResult getActualsVsForecast(@PathVariable("project_id") int id) {
+        List<DomainRangeValue> domainData = reports.getProjectAcutalsVsForecast(id);
+        return new DomainRangeResult.Builder(domainData).domainKey("month").build();
+    }
+
 
 }
