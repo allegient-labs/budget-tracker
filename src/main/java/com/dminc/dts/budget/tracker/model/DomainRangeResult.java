@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class DomainRangeResult {
@@ -51,10 +52,7 @@ public class DomainRangeResult {
 
             result.data = buildDomainLists(domainMap);
             
-            result.rangeKeys = values.stream()
-                    .map(DomainRangeValue::getRange)
-                    .distinct()
-                    .collect(Collectors.toList());
+            result.rangeKeys = getDistinctObjectValues(values, DomainRangeValue::getRange);
             
             result.domainKey = domainKey;
             
@@ -62,26 +60,16 @@ public class DomainRangeResult {
         }
         
         private Map<String, List<DomainRangeValue>> buildDomainRangeValueMap() {
-            Map<String, List<DomainRangeValue>> domainMap = new HashMap<>();
-            
-            List<String> domainKeys = values.stream()
-                    .map(v -> v.getDomain())
-                    .distinct()
-                    .collect(Collectors.toList());
-            
-            for (String key : domainKeys) {
-                List<DomainRangeValue> rangeList = values.stream()
-                        .filter(v -> v.getDomain().equals(key))
-                        .collect(Collectors.toList());
-                domainMap.put(key, rangeList);
-            }
 
-            return domainMap;
+            // Holy Shit!
+            return values.stream().collect(Collectors.groupingBy(v -> v.getDomain()));
         }
 
         private List<Map<String,String>> buildDomainLists(Map<String, List<DomainRangeValue>> domainMap) {
             List<Map<String,String>> domainList = new ArrayList<>();
+
             
+            // Look at groupingBy
             for (String key : domainMap.keySet()) {              
                 Map<String,String> mapEntry = domainMap.get(key).stream()
                         .collect(Collectors.toMap(DomainRangeValue::getRange, DomainRangeValue::getValue));                
@@ -92,6 +80,13 @@ public class DomainRangeResult {
             }
             
             return domainList;
+        }
+        
+        private <T,R> List<R> getDistinctObjectValues(List<T> values, Function<? super T,R> function) {
+            return values.stream()
+                    .map(function)
+                    .distinct()
+                    .collect(Collectors.toList());
         }
     }
     

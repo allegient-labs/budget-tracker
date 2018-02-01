@@ -49,4 +49,16 @@ public class DomainRangeValue implements Serializable {
         this.value = val;
     }
 
+    
+    public static class Builder {
+        private DomainRangeValue v = new DomainRangeValue();
+        public Builder(String domain, String range, String value) {
+            v.domain = domain;
+            v.range = range;
+            v.value = value;
+        }
+        public DomainRangeValue build() {
+            return v;
+        }
+    }
 }
