@@ -3,6 +3,8 @@ package com.dminc.dts.budget.tracker.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +17,7 @@ import com.dminc.dts.budget.tracker.model.ProjectStatus;
 
 @RestController
 @RequestMapping("/reports")
+@PostAuthorize("hasAuthority('view_reports')")
 public class ReportController {
 
     @Autowired

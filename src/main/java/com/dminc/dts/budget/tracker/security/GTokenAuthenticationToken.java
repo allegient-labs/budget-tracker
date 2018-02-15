@@ -3,9 +3,11 @@ package com.dminc.dts.budget.tracker.security;
 import com.google.identitytoolkit.GitkitUser;
 import org.springframework.boot.autoconfigure.info.ProjectInfoProperties;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.servlet.http.Cookie;
 import java.util.Collections;
+import java.util.List;
 
 public final class GTokenAuthenticationToken extends AbstractAuthenticationToken {
 
@@ -17,8 +19,8 @@ public final class GTokenAuthenticationToken extends AbstractAuthenticationToken
         this.token = (cookie == null) ? "" : cookie.getValue();
     }
 
-    GTokenAuthenticationToken(GitkitUser principal) {
-        super(Collections.emptyList());
+    GTokenAuthenticationToken(GitkitUser principal, List<GrantedAuthority> roles) {
+        super(roles);
         this.principal = principal;
     }
 

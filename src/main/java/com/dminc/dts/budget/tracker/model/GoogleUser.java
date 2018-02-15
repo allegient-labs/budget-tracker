@@ -1,8 +1,7 @@
 package com.dminc.dts.budget.tracker.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "google_user")
@@ -11,6 +10,12 @@ public class GoogleUser {
     @Id
     private String id;
     private String email;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name="user_id"),
+            inverseJoinColumns = @JoinColumn(name="role_id"))
+    private List<Role> roles;
 
     public String getLocal_id() {
         return id;
@@ -26,5 +31,9 @@ public class GoogleUser {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Role> getRoles() {
+        return this.roles;
     }
 }
