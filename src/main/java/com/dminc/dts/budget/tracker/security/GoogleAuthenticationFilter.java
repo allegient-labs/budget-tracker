@@ -1,6 +1,9 @@
 package com.dminc.dts.budget.tracker.security;
 
-import org.springframework.core.annotation.Order;
+import com.dminc.dts.budget.tracker.db.GoogleUserRepository;
+import com.dminc.dts.budget.tracker.model.GoogleUser;
+import com.google.identitytoolkit.GitkitUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -17,12 +20,15 @@ import java.io.IOException;
 
 public class GoogleAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
+    GoogleUserRepository userRepository;
+
     private AuthenticationManager authenticationManager;
     private static final String LOGIN_URL = "/callback";
 
-    GoogleAuthenticationFilter(AuthenticationManager authenticationManager) {
+    GoogleAuthenticationFilter(AuthenticationManager authenticationManager, GoogleUserRepository userRepository) {
         super(x -> !x.getRequestURI().equals(LOGIN_URL));  // Don't authenticate requests to the login url
         this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -33,6 +39,19 @@ public class GoogleAuthenticationFilter extends AbstractAuthenticationProcessing
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        GitkitUser principal = (GitkitUser)authResult.getPrincipal();
+
+        // Check if the logged in user exists in the database
+        GoogleUser gUser = userRepository.findGoogleUserById(principal.getLocalId());
+
+        if (gUser == null) {
+            GoogleUser newUser = new GoogleUser();
+            newUser.setEmail(principal.getEmail());
+            newUser.setLocal_id(principal.getLocalId());
+
+            userRepository.save(newUser);
+        }
+
         SecurityContextHolder.getContext().setAuthentication(authResult);
         chain.doFilter(request, response);
     }
