@@ -13,6 +13,5 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @RepositoryRestResource(collectionResourceRel = "timeoffs", path = "timeoffs")
 public interface PersonTimeOffRepository extends PagingAndSortingRepository<PersonTimeOff, Integer> {
 
-    List<PersonTimeOff> findByPersonId(@Param("person_id") Integer id);
-    
+    List<PersonTimeOff> findByPersonId(@Param("person_id") Integer id); 
 }
