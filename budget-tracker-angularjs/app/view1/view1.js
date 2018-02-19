@@ -10,8 +10,25 @@ angular.module('myApp.view1', ['ngRoute'])
   });
 }])
 
-.controller('View1Ctrl', ['adalAuthenticationService', '$rootScope', function(adalService, $rootScope) {
+.controller('View1Ctrl', ['adalAuthenticationService', '$rootScope', '$http', '$scope', function(adalService, $rootScope, $http, $scope) {
+    var self = this;
 
+    $scope.logout = function() {
+      console.log("logout button pressed");
+      adalService.logOut();
+    };
+
+    function init() {
+        $http({
+            method:'GET',
+            url: 'http://localhost:8080/reports/resource-plan/11'
+        }).then(function(res) {
+            console.log(res);
+        }, function(err) {
+            console.log(err);
+        });
+    }
+    init();
   console.log(adalService.userInfo.userName);
 
     $rootScope.$on("adal:acquireTokenFailure", function (event, errorDesc, error) {
