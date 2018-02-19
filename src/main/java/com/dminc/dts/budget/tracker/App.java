@@ -1,4 +1,4 @@
-package com.dminc.dts.budget.tracker.ws;
+package com.dminc.dts.budget.tracker;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,10 +12,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.dminc.dts.budget.tracker.controllers"} )
-@EntityScan(basePackages = {"com.dminc.dts.budget.tracker.model"})
 @EnableJpaRepositories(basePackages = {"com.dminc.dts.budget.tracker.db"})
-
 public class App {
 
     public static void main(String[] args) {

@@ -2,3 +2,7 @@
 .classpath
 .settings
 target/
+.idea/
+node_modules/
+bower_components/
+*.iml
