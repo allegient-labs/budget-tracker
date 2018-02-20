@@ -16,11 +16,16 @@ public class AadBearerTokenAuthenticationProvider implements AuthenticationProvi
             throw new AuthenticationCredentialsNotFoundException("Authorization header required");
         }
 
-        if (!JwtHelper.isValidJwt((String)authentication.getCredentials())) {
+        if (!JwtValidator.isValidJwt((String) authentication.getCredentials())) {
             throw new BadCredentialsException("Invalid Bearer Token");
         }
 
-        IdToken parsedToken = JwtHelper.parseToken((String)authentication.getCredentials());
+        AccessToken parsedToken;
+        try {
+            parsedToken = new AccessToken((String) authentication.getCredentials());
+        } catch (Exception e) {
+            throw new BadCredentialsException("Could not parse access token");
+        }
         return new BearerTokenAuthenticationToken(parsedToken);
     }
 

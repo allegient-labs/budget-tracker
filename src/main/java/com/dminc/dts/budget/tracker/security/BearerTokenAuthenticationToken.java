@@ -7,7 +7,7 @@ import java.util.Collections;
 public class BearerTokenAuthenticationToken extends AbstractAuthenticationToken {
 
     private String token;
-    private IdToken parsedToken;
+    private AccessToken parsedToken;
 
     // Unauthenticated
     BearerTokenAuthenticationToken(String token) {
@@ -16,7 +16,7 @@ public class BearerTokenAuthenticationToken extends AbstractAuthenticationToken 
     }
 
     // Authenticated
-    BearerTokenAuthenticationToken(IdToken token) {
+    BearerTokenAuthenticationToken(AccessToken token) {
         super(token.getGroups());
         super.setAuthenticated(true);
         this.parsedToken = token;

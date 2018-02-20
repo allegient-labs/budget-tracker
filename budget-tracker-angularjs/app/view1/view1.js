@@ -29,17 +29,6 @@ angular.module('myApp.view1', ['ngRoute'])
         });
     };
 
-    $scope.test = function( ){
-        $http({
-            method: 'GET',
-            url: 'http://localhost:8080/reports/test'
-        }).then(function(res) {
-            console.log(res);
-        }, function(err) {
-            console.log(err);
-        });
-    };
-
   console.log(adalService.userInfo.userName);
 
     $rootScope.$on("adal:acquireTokenFailure", function (event, errorDesc, error) {
