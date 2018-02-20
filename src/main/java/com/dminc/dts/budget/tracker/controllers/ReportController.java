@@ -1,27 +1,29 @@
 package com.dminc.dts.budget.tracker.controllers;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.dminc.dts.budget.tracker.db.ProjectStatusRepository;
 import com.dminc.dts.budget.tracker.db.ReportRepository;
 import com.dminc.dts.budget.tracker.model.DomainRangeResult;
 import com.dminc.dts.budget.tracker.model.DomainRangeValue;
 import com.dminc.dts.budget.tracker.model.ProjectStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/reports")
+// This is the object ID for the admin group. Still working on making this more reader-friendly
+@PreAuthorize("hasAuthority('a03090e6-7898-4b72-83da-e345f96e5bf7')")
 public class ReportController {
 
     @Autowired
     ReportRepository reports;
     @Autowired
     ProjectStatusRepository projectStatusRepository;
-    
+
     @RequestMapping("/resource-plan/{project_id}")
     public List<DomainRangeValue> getResourcePlan(@PathVariable("project_id") int id) {
         return reports.getResourcePlanByProjectId(id);

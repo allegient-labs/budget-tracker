@@ -10,14 +10,15 @@ public class BearerTokenAuthenticationToken extends AbstractAuthenticationToken 
     private IdToken parsedToken;
 
     // Unauthenticated
-    public BearerTokenAuthenticationToken(String token) {
+    BearerTokenAuthenticationToken(String token) {
         super(Collections.emptyList());
         this.token = token.replace("Bearer ", "");
     }
 
     // Authenticated
-    public BearerTokenAuthenticationToken(IdToken token) {
+    BearerTokenAuthenticationToken(IdToken token) {
         super(token.getGroups());
+        super.setAuthenticated(true);
         this.parsedToken = token;
     }
 
@@ -29,5 +30,15 @@ public class BearerTokenAuthenticationToken extends AbstractAuthenticationToken 
     @Override
     public Object getPrincipal() {
         return parsedToken == null ? null : parsedToken.getEmail();
+    }
+
+    @Override
+    public boolean isAuthenticated() {
+        return parsedToken != null;
+    }
+
+    @Override
+    public String getName() {
+        return isAuthenticated() ? getPrincipal().toString() : "";
     }
 }

@@ -37,7 +37,4 @@ public class AzureAdTokenAuthenticationFilter extends AbstractAuthenticationProc
         chain.doFilter(request, response);
     }
 
-//    @Override
-//    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-//    }
 }
