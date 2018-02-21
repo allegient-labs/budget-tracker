@@ -18,8 +18,7 @@ public class AccessTokenJwt {
     private String compactToken = "";
 
     private AccessTokenJwt(AccessTokenJwtBuilder builder) throws Exception {
-        // TODO change to relative path
-        PEMParser pemParser = new PEMParser(Files.newBufferedReader(Paths.get("C:\\Users\\cgrove\\dev\\budget-tracker\\src\\main\\resources\\testJwtPrivateKey.pem")));
+        PEMParser pemParser = new PEMParser(Files.newBufferedReader(Paths.get("testJwtPrivateKey.pem")));
         PEMKeyPair keyPair = (PEMKeyPair) pemParser.readObject();
         JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
         PrivateKey privateKey = converter.getPrivateKey(keyPair.getPrivateKeyInfo());

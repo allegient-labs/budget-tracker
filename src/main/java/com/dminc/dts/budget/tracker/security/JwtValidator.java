@@ -18,7 +18,7 @@ import java.util.Iterator;
 
 public class JwtValidator {
 
-    private static final String KEYS_URL = "https://login.microsoftonline.com/common/discovery/keys";
+    private static String KEYS_URL = "https://login.microsoftonline.com/common/discovery/keys";
 
     public static boolean isValidJwt(String token) {
         try {
@@ -93,6 +93,10 @@ public class JwtValidator {
             }
         }
         return null;
+    }
+
+    public static void setCertUrl(String certUrl) {
+        JwtValidator.KEYS_URL = certUrl;
     }
 
     private static class CertificateNotFoundException extends RuntimeException {
