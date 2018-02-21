@@ -13,11 +13,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AccessTokenJwt {
+public class TestAccessToken {
 
     private String compactToken = "";
 
-    private AccessTokenJwt(AccessTokenJwtBuilder builder) throws Exception {
+    private TestAccessToken(TestAccessTokenBuilder builder) throws Exception {
         PEMParser pemParser = new PEMParser(Files.newBufferedReader(Paths.get("testJwtPrivateKey.pem")));
         PEMKeyPair keyPair = (PEMKeyPair) pemParser.readObject();
         JcaPEMKeyConverter converter = new JcaPEMKeyConverter();
@@ -32,7 +32,7 @@ public class AccessTokenJwt {
         return compactToken;
     }
 
-    public static class AccessTokenJwtBuilder {
+    public static class TestAccessTokenBuilder {
         // Default expiration time one hour after creation
         private Map<String, Object> bodyClaims = new HashMap<>();
         private Map<String, Object> header = new HashMap<>();
@@ -50,28 +50,28 @@ public class AccessTokenJwt {
             bodyClaims.put("exp", System.currentTimeMillis() / 1000 + (60 * 60) + "");
         }
 
-        public AccessTokenJwtBuilder withExpiration(long epochSeconds) {
+        public TestAccessTokenBuilder withExpiration(long epochSeconds) {
             bodyClaims.put("exp", epochSeconds);
             return this;
         }
 
-        public AccessTokenJwtBuilder withAudience(String aud) {
+        public TestAccessTokenBuilder withAudience(String aud) {
             bodyClaims.put("aud", aud);
             return this;
         }
 
-        public AccessTokenJwtBuilder withIssuer(String iss) {
+        public TestAccessTokenBuilder withIssuer(String iss) {
             bodyClaims.put("iss", iss);
             return this;
         }
 
-        public AccessTokenJwtBuilder withKid(String kid) {
+        public TestAccessTokenBuilder withKid(String kid) {
             header.put("kid", kid);
             return this;
         }
 
-        public AccessTokenJwt build() throws Exception {
-            return new AccessTokenJwt(this);
+        public String buildAndGetAsString() throws Exception {
+            return new TestAccessToken(this).getCompactToken();
         }
 
     }

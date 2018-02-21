@@ -15,18 +15,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    AadBearerTokenAuthenticationProvider aadBearerTokenAuthenticationProvider;
+    AzureADAccessTokenAuthenticationProvider azureADAccessTokenAuthenticationProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(new AzureAdTokenAuthenticationFilter(authenticationManager()),
+        http.addFilterBefore(new AzureADAccessTokenAuthenticationFilter(authenticationManager()),
                 UsernamePasswordAuthenticationFilter.class);
         http.httpBasic().disable();
         http.csrf().disable();
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(aadBearerTokenAuthenticationProvider);
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(azureADAccessTokenAuthenticationProvider);
     }
 }

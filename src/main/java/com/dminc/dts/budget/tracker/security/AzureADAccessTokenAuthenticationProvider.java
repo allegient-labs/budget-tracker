@@ -9,28 +9,28 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class AadBearerTokenAuthenticationProvider implements AuthenticationProvider {
+public class AzureADAccessTokenAuthenticationProvider implements AuthenticationProvider {
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if (authentication.getCredentials() == null) {
             throw new AuthenticationCredentialsNotFoundException("Authorization header required");
         }
 
-        if (!JwtValidator.isValidJwt((String) authentication.getCredentials())) {
-            throw new BadCredentialsException("Invalid Bearer Token");
+        if (!AzureADAccessTokenValidator.isValidAccessToken((String) authentication.getCredentials())) {
+            throw new BadCredentialsException("Invalid Access Token");
         }
 
-        AccessToken parsedToken;
         try {
-            parsedToken = new AccessToken((String) authentication.getCredentials());
+            AccessToken parsedToken = new AccessToken((String) authentication.getCredentials());
+            return new AzureADAuthenticationToken(parsedToken);
         } catch (Exception e) {
             throw new BadCredentialsException("Could not parse access token");
         }
-        return new BearerTokenAuthenticationToken(parsedToken);
     }
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return aClass.equals(BearerTokenAuthenticationToken.class);
+        return aClass.equals(AzureADAuthenticationToken.class);
     }
 }

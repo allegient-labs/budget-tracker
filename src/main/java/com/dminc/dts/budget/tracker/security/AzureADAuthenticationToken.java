@@ -4,19 +4,19 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 
 import java.util.Collections;
 
-public class BearerTokenAuthenticationToken extends AbstractAuthenticationToken {
+public class AzureADAuthenticationToken extends AbstractAuthenticationToken {
 
     private String token;
     private AccessToken parsedToken;
 
     // Unauthenticated
-    BearerTokenAuthenticationToken(String token) {
+    AzureADAuthenticationToken(String bearerToken) {
         super(Collections.emptyList());
-        this.token = token.replace("Bearer ", "");
+        this.token = bearerToken.replace("Bearer ", "");
     }
 
     // Authenticated
-    BearerTokenAuthenticationToken(AccessToken token) {
+    AzureADAuthenticationToken(AccessToken token) {
         super(token.getGroups());
         super.setAuthenticated(true);
         this.parsedToken = token;

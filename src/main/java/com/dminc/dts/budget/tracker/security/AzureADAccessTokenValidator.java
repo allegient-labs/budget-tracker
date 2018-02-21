@@ -16,20 +16,25 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
 import java.util.Iterator;
 
-public class JwtValidator {
+public class AzureADAccessTokenValidator {
 
     private static String KEYS_URL = "https://login.microsoftonline.com/common/discovery/keys";
+    private static final String EXPECTED_ISS = "https://sts.windows.net/9cdd47ef-e773-44c1-8c21-0ec4bc673f75/";
+    private static final String EXPECTED_AUD = "b4135ffe-00e1-4324-b1ad-72edb3362727";
 
-    public static boolean isValidJwt(String token) {
+    public static boolean isValidAccessToken(String token) {
         try {
             Claims bodyClaims = getBodyClaimsForToken(token);
 
-            // TODO verify additional body claims
+            boolean validAud = bodyClaims.containsKey("aud")
+                    && bodyClaims.get("aud").toString().equals(EXPECTED_AUD);
+            boolean validIss = bodyClaims.containsKey("iss")
+                    && bodyClaims.get("iss").toString().equals(EXPECTED_ISS);
+
+            return validAud && validIss;
         } catch (Exception e) {
             return false;
         }
-
-        return true;
     }
 
     private static Claims getBodyClaimsForToken(String token) throws Exception {
@@ -96,7 +101,7 @@ public class JwtValidator {
     }
 
     public static void setCertUrl(String certUrl) {
-        JwtValidator.KEYS_URL = certUrl;
+        AzureADAccessTokenValidator.KEYS_URL = certUrl;
     }
 
     private static class CertificateNotFoundException extends RuntimeException {

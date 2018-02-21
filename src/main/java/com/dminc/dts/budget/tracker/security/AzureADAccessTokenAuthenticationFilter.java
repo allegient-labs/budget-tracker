@@ -13,22 +13,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AzureAdTokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class AzureADAccessTokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private AuthenticationManager authenticationManager;
 
-    AzureAdTokenAuthenticationFilter(AuthenticationManager authenticationManager) {
-        super(x -> !x.getMethod().equals("OPTIONS"));  // Authenticate all requests
+    AzureADAccessTokenAuthenticationFilter(AuthenticationManager authenticationManager) {
+        super(x -> !x.getMethod().equals("OPTIONS"));
         this.authenticationManager = authenticationManager;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader == null) {
-            throw new AuthenticationCredentialsNotFoundException("Bearer Token Required");
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken == null) {
+            throw new AuthenticationCredentialsNotFoundException("Access Token Required");
         }
-        return authenticationManager.authenticate(new BearerTokenAuthenticationToken(authorizationHeader));
+        return authenticationManager.authenticate(new AzureADAuthenticationToken(bearerToken));
     }
 
     @Override

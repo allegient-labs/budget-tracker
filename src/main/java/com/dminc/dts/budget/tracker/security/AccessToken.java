@@ -13,7 +13,6 @@ public class AccessToken {
     private String email;
     private List<GrantedAuthority> groups;
 
-    // TODO handle invalid credentials
     AccessToken(String credentials) throws Exception {
         DecodedJWT decodedJWT = JWT.decode(credentials);
 
