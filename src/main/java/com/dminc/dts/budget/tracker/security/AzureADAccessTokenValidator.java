@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.security.PublicKey;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class AzureADAccessTokenValidator {
@@ -21,6 +22,12 @@ public class AzureADAccessTokenValidator {
     private static String KEYS_URL = "https://login.microsoftonline.com/common/discovery/keys";
     private static final String EXPECTED_ISS = "https://sts.windows.net/40d2219d-b636-4bed-9185-e876d026d77b/";
     private static final String EXPECTED_AUD = "295103ad-e41c-45a3-a14b-9dc7ddfbf2b1";
+
+    private static HashMap<String, String> certificateCache = new HashMap<>();
+
+    public static void setCertUrl(String certUrl) {
+        AzureADAccessTokenValidator.KEYS_URL = certUrl;
+    }
 
     public static boolean isValidAccessToken(String token) {
         try {
@@ -57,6 +64,12 @@ public class AzureADAccessTokenValidator {
     }
 
     private static String getCertificateStringForKeyId(String kid) throws Exception {
+        String cert = certificateCache.get(kid);
+
+        if (cert != null) {
+            return cert;
+        }
+
         String keysJson = getJsonForUrl(KEYS_URL);
         return extractCertWithKidFromKeysJson(kid, keysJson);
     }
@@ -69,19 +82,14 @@ public class AzureADAccessTokenValidator {
         ObjectMapper om = new ObjectMapper();
 
         JsonNode root = om.readTree(json).findValue("keys");
-        if (root.isArray()) {
-            String certText = getCertWithKeyIdFromArray(kid, root);
-            if (certText != null) return certText;
-        } else {
-            String certText = root.findValue("x5c").asText("");
-            if (certText.length() > 0) {
-                return certText;
-            }
-        }
+
+        String certText = getCertWithKeyIdFromJsonArray(kid, root);
+        if (certText != null) return certText;
+
         throw new CertificateNotFoundException("Could not find certificate for kid: " + kid);
     }
 
-    private static String getCertWithKeyIdFromArray(String kid, JsonNode array) {
+    private static String getCertWithKeyIdFromJsonArray(String kid, JsonNode array) {
         Iterator<JsonNode> keys = array.elements();
         while (keys.hasNext()) {
             JsonNode key = keys.next();
@@ -90,6 +98,9 @@ public class AzureADAccessTokenValidator {
             if (otherKid.equals(kid)) {
                 JsonNode certNode = key.findValue("x5c");
                 String certText = certNode.get(0).asText("");
+
+                certificateCache.put(kid, certText);
+
                 if (certText.equals("")) {
                     throw new CertificateNotFoundException("Could not find certificate for kid: " + kid);
                 }
@@ -98,10 +109,6 @@ public class AzureADAccessTokenValidator {
             }
         }
         return null;
-    }
-
-    public static void setCertUrl(String certUrl) {
-        AzureADAccessTokenValidator.KEYS_URL = certUrl;
     }
 
     private static class CertificateNotFoundException extends RuntimeException {
