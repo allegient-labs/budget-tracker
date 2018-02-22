@@ -19,8 +19,8 @@ import java.util.Iterator;
 public class AzureADAccessTokenValidator {
 
     private static String KEYS_URL = "https://login.microsoftonline.com/common/discovery/keys";
-    private static final String EXPECTED_ISS = "https://sts.windows.net/9cdd47ef-e773-44c1-8c21-0ec4bc673f75/";
-    private static final String EXPECTED_AUD = "b4135ffe-00e1-4324-b1ad-72edb3362727";
+    private static final String EXPECTED_ISS = "https://sts.windows.net/40d2219d-b636-4bed-9185-e876d026d77b/";
+    private static final String EXPECTED_AUD = "295103ad-e41c-45a3-a14b-9dc7ddfbf2b1";
 
     public static boolean isValidAccessToken(String token) {
         try {

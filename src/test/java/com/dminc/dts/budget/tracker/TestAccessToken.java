@@ -1,4 +1,4 @@
-package com.dminc.dts.jwt;
+package com.dminc.dts.budget.tracker;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -45,8 +45,8 @@ public class TestAccessToken {
             bodyClaims.put("email", "timtester@budgetTracker.onmicrosoft.com");
             bodyClaims.put("groups", Collections.singletonList("e2577ae3-b64b-4585-a8bd-eb3180a11ee4"));
             bodyClaims.put("name", "Tim Tester");
-            bodyClaims.put("iss", "https://sts.windows.net/9cdd47ef-e773-44c1-8c21-0ec4bc673f75/");
-            bodyClaims.put("aud", "b4135ffe-00e1-4324-b1ad-72edb3362727");
+            bodyClaims.put("iss", "https://sts.windows.net/40d2219d-b636-4bed-9185-e876d026d77b/");
+            bodyClaims.put("aud", "295103ad-e41c-45a3-a14b-9dc7ddfbf2b1");
             bodyClaims.put("exp", System.currentTimeMillis() / 1000 + (60 * 60) + "");
         }
 

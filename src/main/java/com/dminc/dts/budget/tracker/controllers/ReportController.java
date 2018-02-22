@@ -15,8 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reports")
-// This is the object ID for the admin group. Still working on making this more reader-friendly
-@PreAuthorize("hasAuthority('a03090e6-7898-4b72-83da-e345f96e5bf7')")
+//@PreAuthorize("hasAuthority('object id for group')")
 public class ReportController {
 
     @Autowired

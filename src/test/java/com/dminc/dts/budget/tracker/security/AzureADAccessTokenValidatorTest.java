@@ -1,6 +1,6 @@
 package com.dminc.dts.budget.tracker.security;
 
-import com.dminc.dts.jwt.TestAccessToken;
+import com.dminc.dts.budget.tracker.TestAccessToken;
 import org.junit.Before;
 import org.junit.Test;
 
